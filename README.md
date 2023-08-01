@@ -1,3 +1,3 @@
 # RGS NextJs
 
-RGS client.
+RGS client. Visit rg-staking.on.fleek.co.
