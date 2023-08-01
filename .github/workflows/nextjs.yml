@@ -59,25 +59,20 @@ jobs:
 
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
-        working-directory: ./client
 
       - name: Lint
         run: ${{ steps.detect-package-manager.outputs.manager }} lint
-        working-directory: ./client
 
       - name: Code formatting
         run: ${{ steps.detect-package-manager.outputs.manager }} prettier
-        working-directory: ./client
 
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
-        working-directory: ./client
 
       - name: Static HTML export with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next export
-        working-directory: ./client
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: ./client/out
+          path: ./out
