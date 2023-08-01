@@ -4,7 +4,7 @@ import React from "react"
 import { ChangeEvent } from "react"
 import { useWeb3Contract } from "react-moralis"
 
-import { Button, Input } from "@web3uikit/core"
+import { Button, Input, notifyType } from "@web3uikit/core"
 
 import { RGStakingABI, RGTokenABI } from "@/constants/"
 
@@ -14,6 +14,8 @@ interface Props {
   rGStakingAddress: string
   rGTokenAddress: string
   allowance: BigNumber
+  handleNotification: (message: string, type: notifyType) => void
+  handleTransactionSubmitted: () => void
   handleTransactionSuccess: (tx: any, message: string) => void
   handleFailedTransactionSubmission: (tx: any) => void
   onChange: (event: ChangeEvent<HTMLInputElement>) => void
@@ -25,6 +27,8 @@ const AssetManagement = ({
   rGStakingAddress,
   rGTokenAddress,
   allowance,
+  handleNotification,
+  handleTransactionSubmitted,
   handleTransactionSuccess,
   handleFailedTransactionSubmission,
   onChange,
@@ -59,8 +63,12 @@ const AssetManagement = ({
   })
 
   async function handleTokensApprovalSuccess(tx: any) {
-    handleTransactionSuccess(tx, "Tokens Approval Success!")
-    callBuyAssets()
+    handleTransactionSubmitted()
+
+    tx.wait(1).then(() => {
+      handleNotification("Tokens Approval Success!", "success")
+      callBuyAssets()
+    })
   }
 
   async function handleAssetsBoughtSuccess(tx: any) {
@@ -87,11 +95,11 @@ const AssetManagement = ({
     })
   }
 
-  function callApproveAndBuyAssets() {
+  async function callApproveAndBuyAssets() {
     if (!amountOfAssets) return
 
     if (allowance.lt(assetsToTokenPrice)) {
-      approve({
+      await approve({
         onSuccess: handleTokensApprovalSuccess,
         onError: handleFailedTransactionSubmission,
       })

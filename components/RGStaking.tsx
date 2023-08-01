@@ -182,6 +182,8 @@ const RGStaking = () => {
             allowance={allowance}
             handleTransactionSuccess={handleTransactionSuccess}
             handleFailedTransactionSubmission={handleFailedTransactionSubmission}
+            handleTransactionSubmitted={handleTransactionSubmitted}
+            handleNotification={handleNotification}
             onChange={(event: ChangeEvent<HTMLInputElement>) => {
               setAmountOfAssets(event.currentTarget.value)
             }}
